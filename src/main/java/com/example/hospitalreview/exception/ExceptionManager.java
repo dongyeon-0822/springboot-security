@@ -13,4 +13,10 @@ public class ExceptionManager {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Response.error(e.getMessage()));
     }
+
+    @ExceptionHandler(HospitalReviewException.class)
+    public ResponseEntity<?> hospitalReviewExceptionHandler(HospitalReviewException e) {
+        return ResponseEntity.status(e.getErrorCode().getStatus())
+                .body(Response.error(e.getErrorCode().name()));
+    }
 }

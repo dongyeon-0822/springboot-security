@@ -3,6 +3,8 @@ package com.example.hospitalreview.service;
 import com.example.hospitalreview.domain.User;
 import com.example.hospitalreview.domain.dto.UserDto;
 import com.example.hospitalreview.domain.dto.UserJoinRequest;
+import com.example.hospitalreview.exception.ErrorCode;
+import com.example.hospitalreview.exception.HospitalReviewException;
 import com.example.hospitalreview.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,10 @@ public class UserService {
         //userName(id) 중복 check
         userRepository.findByUserName(request.getUserName())
                 .ifPresent(user -> {
-                    throw new RuntimeException("해당 UserName이 중복 됩니다.");
+                    throw new HospitalReviewException(
+                            ErrorCode.DUPLICATED_USER_NAME,
+                            String.format("Username : %s", request.getUserName())
+                    );
                 });
 
         User savedUser = userRepository.save(request.toEntity());
